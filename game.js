@@ -1,7 +1,7 @@
 'use strict';
 
 /*
- * Pixel War: a territory-conquest game for touch screens.
+ * Pixel War XL: a territory-conquest game for touch screens.
  *
  * The map is a grid of cells, either random islands or real countries
  * (World / Europe). Every faction's troops and gold grow over time. Troops
@@ -12,11 +12,11 @@
 (() => {
   // Players must run the same version to share a game (keep in step with
   // package.json).
-  const APP_VERSION = '1.11.0';
+  const APP_VERSION = '1.0.0';
   const WATER = -2;
   const NEUTRAL = -1;
   const TICK = 0.1;               // seconds of game time per simulation step
-  const TARGET_CELLS = 16000;     // approximate number of cells on a random map
+  const TARGET_CELLS = 64000;     // approximate number of cells on a random map
   const DEMO_CELLS = 9000;
   const SPAWN_RADIUS = 3;
   const COUNTRY_START_CELLS = 220; // land granted when starting in a country
@@ -26,7 +26,7 @@
   const NEUTRAL_RATE = 0.18;      // share of the frontier taken per tick
   const ENEMY_RATE = 0.1;
   const ATTACK_FOCUS = 14;        // cells either side of the aim that advance
-  const SLOT = 10;                // stride for the attacker/target lookup table
+  const SLOT = 16;                // stride for the attacker/target lookup table (more than MAX_FACTIONS)
   // Building stats by level (index 0 = level 1). Upgrades go up to level 3.
   const MAX_LEVEL = 3;
   const CITY_CAP = [3000, 6000, 10000];
@@ -228,7 +228,9 @@
   const TINY_ISLAND = 5;          // islands smaller than this many cells are removed
   // Gameplay distances and rates are tuned for these map widths; finer maps
   // scale them up so a game plays the same at any resolution.
-  const BASE_WIDTH = { world: 420, europe: 260 };
+  // XL maps are drawn twice as wide as Pixel War's but keep its unit sizes
+  // (ranges, blasts, starting land), so there is 4x the room.
+  const BASE_WIDTH = { world: 840, europe: 520 };
   const MIN_SPACING = 2;          // free cells required around a building
 
   const NEUTRAL_RGB = [196, 190, 168];
@@ -248,8 +250,13 @@
     { name: 'Lime', rgb: [132, 204, 22] },
     { name: 'White', rgb: [236, 238, 242] },
     { name: 'Bronze', rgb: [150, 98, 52] },
+    { name: 'Sky', rgb: [56, 189, 248] },
+    { name: 'Gold', rgb: [250, 204, 21] },
+    { name: 'Indigo', rgb: [67, 56, 202] },
+    { name: 'Maroon', rgb: [127, 29, 29] },
+    { name: 'Olive', rgb: [101, 121, 40] },
   ];
-  const MAX_FACTIONS = 6;
+  const MAX_FACTIONS = 15;
   const colourCss = (k) => `rgb(${COLOURS[k].rgb.join(',')})`;
 
   // Give each human their chosen colour unless someone earlier has it, in
@@ -352,7 +359,7 @@
   const store = {
     get(key, fallback) {
       try {
-        const v = localStorage.getItem('pixelwar.' + key);
+        const v = localStorage.getItem('pixelwarxl.' + key);
         return v === null ? fallback : JSON.parse(v);
       } catch (e) {
         return fallback;
@@ -360,14 +367,14 @@
     },
     set(key, value) {
       try {
-        localStorage.setItem('pixelwar.' + key, JSON.stringify(value));
+        localStorage.setItem('pixelwarxl.' + key, JSON.stringify(value));
       } catch (e) {
         // Storage unavailable (private mode etc.): ignore.
       }
     },
   };
 
-  const settings = Object.assign({ opponents: 3, allies: 0, difficulty: 'normal', pct: 50, map: 'world', colour: 0 },
+  const settings = Object.assign({ opponents: 8, allies: 0, difficulty: 'normal', pct: 50, map: 'world', colour: 0 },
     store.get('settings', {}));
   if (!(settings.opponents >= 1)) settings.opponents = 1;
   const record = Object.assign({ wins: 0, losses: 0, fastest: null }, store.get('record', {}));
@@ -1243,7 +1250,7 @@
       }
     }
 
-    G.minSpawnDist = Math.max(gw, gh) * (G.real ? 0.12 : count > 4 ? 0.22 : 0.28);
+    G.minSpawnDist = Math.max(gw, gh) * (G.real ? (count > 8 ? 0.09 : 0.12) : count > 10 ? 0.15 : count > 4 ? 0.22 : 0.28);
     const taken = [];
     for (const f of G.factions) {
       if (f.isPlayer) continue;
@@ -5620,17 +5627,19 @@
       const share = (f) => Math.round(f.cells / G.landCells * 1000);
       const rows = G.factions
         .filter((f) => f.alive)
-        .sort((a, b) => share(b) - share(a) || a.id - b.id)
-        .slice(0, 6)
-        .map((f) => {
+        .sort((a, b) => share(b) - share(a) || a.id - b.id);
+      // The top six, plus you if you're further down.
+      const top = rows.slice(0, 6);
+      const mine = rows.find((f) => f.id === myId);
+      if (mine && !top.includes(mine)) top.push(mine);
+      $('board').innerHTML = top.map((f) => {
           const pc = (f.cells / G.landCells * 100).toFixed(1);
           const tag = f.id === myId ? '' : isAlly(myId, f.id) ? '<span class="tm" title="Ally">🤝</span>'
             : inTruce(myId, f.id) ? '<span class="tm" title="Ceasefire">⏸</span>' : '';
           return `<li class="${f.id === myId ? 'me' : ''}" data-fid="${f.id}"><span class="sw" style="background:${f.css}"></span>`
             + `${tag}<span class="bn">${f.name}</span><span class="pc">${pc}%</span>`
             + `<span class="tr">${fmt(f.troops)}</span></li>`;
-        });
-      $('board').innerHTML = rows.join('');
+        }).join('');
       if ($('build-sheet').classList.contains('show') && !sheetPressed) renderBuildSheet();
     }
   }
@@ -6196,7 +6205,7 @@
   // ticked off when the player has done it (or skipped).
 
   const TUTORIAL = [
-    { text: '<b>Welcome to Pixel War!</b> Tap a country on the map to lead it.', done: (me) => me.capital >= 0 },
+    { text: '<b>Welcome to Pixel War XL!</b> Tap a country on the map to lead it.', done: (me) => me.capital >= 0 },
     {
       text: 'Tap <b>empty land</b> next to your country to expand. The <b>Send</b> slider at the bottom sets how many troops go.',
       // Land actually captured (your starting land fills in by itself).
@@ -6570,7 +6579,7 @@
   // The host runs the simulation and streams snapshots ~10 times a second;
   // clients only render and send their taps as actions.
 
-  const PEER_PREFIX = 'pixelwar-v1-';
+  const PEER_PREFIX = 'pixelwarxl-v1-';
   // STUN servers help devices behind home routers find a direct route.
   const STUN_SERVERS = [
     { urls: 'stun:stun.l.google.com:19302' },
@@ -6624,7 +6633,7 @@
     $('btn-start').classList.toggle('hidden', net.role !== 'host');
     $('btn-ready').classList.toggle('hidden', net.role !== 'client');
     $('lobby-note').textContent = net.role === 'host'
-      ? 'Friends open Pixel War on any device (browser, Android or Windows), tap Join and enter this code. '
+      ? 'Friends open Pixel War XL on any device (browser, Android or Windows), tap Join and enter this code. '
         + 'Tap an AI slot to switch it on or off, and a team badge to put nations on the same side. '
         + 'The map and difficulty come from your menu settings.'
       : 'Pick a colour, then tap Ready. The host starts the game once everyone is ready.';
@@ -6903,7 +6912,7 @@
         conn.send({
           t: 'refused',
           why: `Version mismatch: the host has v${APP_VERSION}, you have ${msg.v ? 'v' + msg.v : 'an older version'}. `
-            + 'Update Pixel War (reload the website or install the latest app) so you both match.',
+            + 'Update Pixel War XL (reload the website or install the latest app) so you both match.',
         });
         setTimeout(() => conn.close(), 1500);
         return;
@@ -7376,7 +7385,7 @@
   function clientStart(msg) {
     const rec = msg.kind !== 'random' && window.PIXEL_WAR_MAPS ? window.PIXEL_WAR_MAPS[msg.kind] : null;
     if (msg.kind !== 'random' && (!rec || rec.w !== msg.gw || rec.h !== msg.gh)) {
-      throw new Error('this copy has a different map. Update Pixel War');
+      throw new Error('this copy has a different map. Update Pixel War XL');
     }
     $('over').classList.remove('show');
     settings.difficulty = DIFFICULTY[msg.difficulty] ? msg.difficulty : settings.difficulty;

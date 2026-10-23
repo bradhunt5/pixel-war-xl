@@ -1,17 +1,30 @@
-# Pixel War
+# Pixel War XL
 
-A territory-conquest strategy game in the spirit of Roblox's *Pixel Conquest*.
+The big-war edition of [Pixel War](https://github.com/bradhunt5/pixel-war):
+the same game, with **up to 15 nations** and **maps twice as wide and tall**
+(four times the area). Unit sizes, weapon ranges and starting land are the
+same as Pixel War, so there's far more room to expand and fight over.
+
+| | Pixel War | Pixel War XL |
+|---|---|---|
+| Nations per game | 6 | 15 |
+| World map | 700 × 358 cells | 1,400 × 716 cells |
+| Europe map | 400 × 353 cells | 800 × 707 cells |
+| Random map | about 16,000 cells | about 64,000 cells |
+
 It's built for phones, but it plays in any modern browser. It's plain HTML5,
 CSS and JavaScript with no build step. It also ships as an Android APK and a
-Windows app, and up to six players can play together on any mix of devices.
+Windows app that install alongside Pixel War (they have their own app ID,
+saved settings and multiplayer rooms, so the two never clash), and up to 15
+players can play together on any mix of devices.
 
 ## How to play
 
 1. Choose a map (**World**, **Europe** or **Random** islands), the number of
-   AI opponents (1–5), any **AI allies** (0–3), your colour and a
+   AI opponents (2, 5, 8, 11 or 14), any **AI allies** (0–6), your colour and a
    difficulty, then press **Play**. Allies are on your team: they never
    attack you, and your team wins together. Opponents fight each other as
-   well as you. The game holds six nations, so opponents are trimmed if
+   well as you. The game holds 15 nations, so opponents are trimmed if
    allies plus opponents won't fit.
 2. On World or Europe, **tap a country** to lead it. You start with the part
    of it around where you tapped. On Random, tap anywhere to place your
@@ -240,7 +253,7 @@ nuke, and otherwise pauses the game instead of leaving it.
 
 Each rival gets a personality. Every game includes a **Warlord** (very
 aggressive), a **Balanced** rival and a **Turtle** (saves up, expands slowly).
-With four or five opponents, a **Raider** and a **Settler** join in.
+With four or more opponents, a **Raider** and a **Settler** join in.
 Difficulty changes how fast rivals earn troops and gold (Easy ×0.54, Normal
 ×0.68, Hard ×0.82 of a human player's rate), how aggressive they are, and how
 keen they are to target you. AI nations build and upgrade mines, cities, forts and artillery, and send
@@ -283,8 +296,13 @@ nation, with each AI's level.
 
 ## Multiplayer
 
-Up to six players can share one war, on any mix of browsers, the Android
-app and the Windows app. The lobby shows all six nation slots. Empty slots
+Up to 15 players can share one war, on any mix of browsers, the Android
+app and the Windows app. The lobby shows all 15 nation slots.
+
+The host's device runs the game for everyone, so its upload speed is what
+limits big games. In a busy 15-nation World game each joiner needs about
+60 KB/s (roughly 0.5 Mbit/s), so a full room needs 6–7 Mbit/s of upload from
+the host: fine on home broadband, tight on a phone hotspot. Empty slots
 are AI nations by default, and the host taps a slot to switch its AI on or
 off (switch them all off for humans only). Each new player takes the next
 slot. Your menu colour is your first choice, and you can change it in the
@@ -339,7 +357,7 @@ joiners send their taps and receive the map about ten times a second.
 
 ### In a browser
 
-The game is live at <https://bradhunt5.github.io/pixel-war/>. It works in any
+The game is live at <https://bradhunt5.github.io/pixel-war-xl/>. It works in any
 modern browser on a phone, tablet or computer.
 
 ### Android app (APK)
@@ -349,11 +367,11 @@ automatically. You can also start a build by hand: open the repository's
 **Actions** tab, choose **Build apps** and click **Run workflow**.
 
 1. On the phone, open the repository's **Releases** page and download
-   `PixelWar.apk`. For a hand-started build, download it from the build's
+   `PixelWarXL.apk`. For a hand-started build, download it from the build's
    **Artifacts** instead.
 2. Open the file. Android asks you to allow installs from your browser or
    file manager: allow it once.
-3. Tap **Install**, then open **Pixel War** from the app drawer.
+3. Tap **Install**, then open **Pixel War XL** from the app drawer.
 
 The APK is a debug build signed by GitHub's build machine. That's fine for
 sideloading. Publishing to the Play Store would need a release signing key.
@@ -362,8 +380,8 @@ sideloading. Publishing to the Play Store would need a release signing key.
 
 The same build produces two Windows files:
 
-- `PixelWar-Setup.exe` installs Pixel War with a Start menu entry.
-- `PixelWar-portable.exe` runs without installing.
+- `PixelWarXL-Setup.exe` installs Pixel War XL with a Start menu entry.
+- `PixelWarXL-portable.exe` runs without installing.
 
 Windows SmartScreen may warn that the app is from an unknown publisher,
 because it isn't code-signed. Click **More info → Run anyway**. **F11**
@@ -378,11 +396,11 @@ works offline.
 ### Run it on this Mac
 
 ```bash
-cd ~/Claude/pixel-war
-python3 -m http.server 8765
+cd ~/Claude/pixel-war-xl
+python3 -m http.server 8766
 ```
 
-Then open <http://localhost:8765>. To run the desktop app instead (needs
+Then open <http://localhost:8766>. To run the desktop app instead (needs
 Node.js):
 
 ```bash
@@ -393,7 +411,7 @@ npm run desktop
 ### Updating
 
 After changing any file, bump `CACHE` in `sw.js` (for example
-`pixel-war-v6`) and push. GitHub Pages updates the website, and installed web
+`pixel-war-xl-v2`) and push. GitHub Pages updates the website, and installed web
 apps pick up the new version the next time they are opened with a
 connection. For new APK and Windows builds, push a new version tag:
 

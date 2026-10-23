@@ -314,6 +314,7 @@ body[data-state='paused'] #pause,
   text-shadow: 3px 3px 0 #1d4ed8;
 }
 .logo span { color: var(--danger); text-shadow: 3px 3px 0 #7f1d1d; margin-left: 0.2em; }
+.logo span.xl { color: #fbbf24; text-shadow: 3px 3px 0 #78350f; }
 
 .tag { margin: 0; color: var(--muted); font-size: 14px; }
 

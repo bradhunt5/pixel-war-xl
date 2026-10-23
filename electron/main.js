@@ -1,4 +1,4 @@
-// Windows (and macOS/Linux) desktop wrapper for Pixel War.
+// Windows (and macOS/Linux) desktop wrapper for Pixel War XL.
 const { app, BrowserWindow, Menu } = require('electron');
 const path = require('path');
 
@@ -9,7 +9,7 @@ function createWindow() {
     minWidth: 360,
     minHeight: 600,
     backgroundColor: '#07101d',
-    title: 'Pixel War',
+    title: 'Pixel War XL',
     icon: path.join(__dirname, '..', 'www', 'icons', 'icon-512.png'),
     autoHideMenuBar: true,
     webPreferences: { contextIsolation: true, sandbox: true },

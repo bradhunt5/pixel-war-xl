@@ -17,8 +17,8 @@ from pathlib import Path
 
 # name, west, east, south, north (degrees), grid width in cells
 REGIONS = [
-    ('world', 'World', -180.0, 180.0, -56.0, 75.0, 700),
-    ('europe', 'Europe', -25.0, 50.0, 34.0, 71.0, 400),
+    ('world', 'World', -180.0, 180.0, -56.0, 75.0, 1400),
+    ('europe', 'Europe', -25.0, 50.0, 34.0, 71.0, 800),
 ]
 
 

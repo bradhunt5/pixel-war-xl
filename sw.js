@@ -1,7 +1,7 @@
 'use strict';
 
 // Bump the version whenever a cached file changes so phones pick it up.
-const CACHE = 'pixel-war-v42';
+const CACHE = 'pixel-war-xl-v1';
 const ASSETS = [
   './',
   './index.html',
@@ -26,7 +26,8 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys()
-      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))))
+      // Only our own old caches: Pixel War shares this website.
+      .then((keys) => Promise.all(keys.filter((k) => k.startsWith('pixel-war-xl-') && k !== CACHE).map((k) => caches.delete(k))))
       .then(() => self.clients.claim()),
   );
 });

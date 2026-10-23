@@ -64,7 +64,7 @@
       this.destroyed = false;
       this.disconnected = false;
       this.conns = new Map();
-      this.bc = new BroadcastChannel('pixelwar-localnet');
+      this.bc = new BroadcastChannel('pixelwarxl-localnet');
       this.bc.onmessage = (e) => this.receive(e.data);
       setTimeout(() => {
         this.open = true;

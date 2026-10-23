@@ -1,6 +1,6 @@
 {
-  "appId": "io.github.bradhunt5.pixelwar",
-  "appName": "Pixel War",
+  "appId": "io.github.bradhunt5.pixelwarxl",
+  "appName": "Pixel War XL",
   "webDir": "www",
   "backgroundColor": "#07101d",
   "android": { "backgroundColor": "#07101d" }

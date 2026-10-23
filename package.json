@@ -1,7 +1,7 @@
 {
-  "name": "pixel-war",
-  "version": "1.11.0",
-  "description": "Pixel War: a territory-conquest strategy game",
+  "name": "pixel-war-xl",
+  "version": "1.0.0",
+  "description": "Pixel War XL: a territory-conquest strategy game",
   "author": "Brad Hunt",
   "license": "UNLICENSED",
   "private": true,
@@ -21,8 +21,8 @@
     "peerjs": "^1.5.4"
   },
   "build": {
-    "appId": "io.github.bradhunt5.pixelwar",
-    "productName": "Pixel War",
+    "appId": "io.github.bradhunt5.pixelwarxl",
+    "productName": "Pixel War XL",
     "files": [
       "electron/**",
       "www/**"
@@ -40,10 +40,10 @@
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
-      "artifactName": "PixelWar-Setup.exe"
+      "artifactName": "PixelWarXL-Setup.exe"
     },
     "portable": {
-      "artifactName": "PixelWar-portable.exe"
+      "artifactName": "PixelWarXL-portable.exe"
     }
   }
 }

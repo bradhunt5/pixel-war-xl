@@ -49,11 +49,11 @@ jobs:
         working-directory: android
         run: ./gradlew assembleDebug --no-daemon
       - name: Rename
-        run: cp android/app/build/outputs/apk/debug/app-debug.apk PixelWar.apk
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk PixelWarXL.apk
       - uses: actions/upload-artifact@v4
         with:
-          name: PixelWar-android
-          path: PixelWar.apk
+          name: PixelWarXL-android
+          path: PixelWarXL.apk
 
   windows:
     runs-on: windows-latest
@@ -68,10 +68,10 @@ jobs:
         run: npm run build:win
       - uses: actions/upload-artifact@v4
         with:
-          name: PixelWar-windows
+          name: PixelWarXL-windows
           path: |
-            dist/PixelWar-Setup.exe
-            dist/PixelWar-portable.exe
+            dist/PixelWarXL-Setup.exe
+            dist/PixelWarXL-portable.exe
 
   release:
     if: startsWith(github.ref, 'refs/tags/v')
@@ -85,6 +85,6 @@ jobs:
       - uses: softprops/action-gh-release@v2
         with:
           files: |
-            out/PixelWar.apk
-            out/PixelWar-Setup.exe
-            out/PixelWar-portable.exe
+            out/PixelWarXL.apk
+            out/PixelWarXL-Setup.exe
+            out/PixelWarXL-portable.exe
