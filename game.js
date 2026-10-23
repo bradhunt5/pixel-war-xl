@@ -12,7 +12,7 @@
 (() => {
   // Players must run the same version to share a game (keep in step with
   // package.json).
-  const APP_VERSION = '1.0.0';
+  const APP_VERSION = '1.0.1';
   const WATER = -2;
   const NEUTRAL = -1;
   const TICK = 0.1;               // seconds of game time per simulation step
@@ -248,7 +248,7 @@
     { name: 'Rose', rgb: [226, 72, 153] },
     { name: 'Teal', rgb: [20, 184, 166] },
     { name: 'Lime', rgb: [132, 204, 22] },
-    { name: 'White', rgb: [236, 238, 242] },
+    { name: 'Magenta', rgb: [217, 70, 239] },
     { name: 'Bronze', rgb: [150, 98, 52] },
     { name: 'Sky', rgb: [56, 189, 248] },
     { name: 'Gold', rgb: [250, 204, 21] },
@@ -5628,11 +5628,9 @@
       const rows = G.factions
         .filter((f) => f.alive)
         .sort((a, b) => share(b) - share(a) || a.id - b.id);
-      // The top six, plus you if you're further down.
-      const top = rows.slice(0, 6);
-      const mine = rows.find((f) => f.id === myId);
-      if (mine && !top.includes(mine)) top.push(mine);
-      $('board').innerHTML = top.map((f) => {
+      // Every nation still standing; rows tighten up in big games.
+      $('board').classList.toggle('many', rows.length > 8);
+      $('board').innerHTML = rows.map((f) => {
           const pc = (f.cells / G.landCells * 100).toFixed(1);
           const tag = f.id === myId ? '' : isAlly(myId, f.id) ? '<span class="tm" title="Ally">🤝</span>'
             : inTruce(myId, f.id) ? '<span class="tm" title="Ceasefire">⏸</span>' : '';

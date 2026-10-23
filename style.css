@@ -100,7 +100,13 @@ body:not([data-state='menu']) .hud { display: flex; }
   font-size: 11px;
   pointer-events: none;
   z-index: 4;
+  /* All 15 nations fit; on a short screen the list scrolls above the controls. */
+  max-height: calc(100vh - env(safe-area-inset-top) - 66px - 120px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
+#board.many { gap: 0; font-size: 10.5px; }
+#board.many li { padding: 1.5px 0; }
 #board li { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
 #board li.me { font-weight: 700; }
 #board .sw { width: 9px; height: 9px; border-radius: 2px; flex: none; }
